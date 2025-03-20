@@ -29,26 +29,19 @@ export const NewMovie: React.FC<Props> = props => {
   const [imgUrl, setImgUrl] = useState('');
   const [imdbUrl, setImdbUrl] = useState('');
   const [imdbId, setImdbId] = useState('');
-
-  const [titleError, setTitleError] = useState(true);
   const [onDisabledSubmit, setOnDisabledSubmit] = useState(true);
 
   const validateForm = () => {
     let isValid = true;
 
-    if (titleBody.trim() === '') {
-      isValid = false;
-    }
+    setOnDisabledSubmit(!isValid);
 
-    if (imgUrl.trim() === '') {
-      isValid = false;
-    }
-
-    if (imdbUrl.trim() === '') {
-      isValid = false;
-    }
-
-    if (imdbId.trim() === '') {
+    if (
+      titleBody.trim() === '' ||
+      imgUrl.trim() === '' ||
+      imdbUrl.trim() === '' ||
+      imdbId.trim() === ''
+    ) {
       isValid = false;
     }
 
@@ -80,27 +73,15 @@ export const NewMovie: React.FC<Props> = props => {
   };
 
   const validationField = (validation: Validation) => {
-    if (
-      validation.imdbUrl !== '' &&
-      validation.title !== '' &&
-      validation.imgUrl !== '' &&
-      validation.imdbId !== ''
-    ) {
-      setTitleError(false);
-      props.onAdd(validation);
+    props.onAdd(validation);
 
-      setTitleBody('');
-      setDescription('');
-      setImgUrl('');
-      setImdbUrl('');
-      setImdbId('');
+    setTitleBody('');
+    setDescription('');
+    setImgUrl('');
+    setImdbUrl('');
+    setImdbId('');
 
-      setCount(count + 1);
-
-      return;
-    }
-
-    setOnDisabledSubmit(true);
+    setCount(count + 1);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -118,12 +99,7 @@ export const NewMovie: React.FC<Props> = props => {
   };
 
   return (
-    <form
-      action="../../api/movies.json"
-      className="NewMovie"
-      key={count}
-      onSubmit={handleSubmit}
-    >
+    <form className="NewMovie" key={count} onSubmit={handleSubmit}>
       <h2 className="title">Add a movie</h2>
 
       <TextField
@@ -131,7 +107,7 @@ export const NewMovie: React.FC<Props> = props => {
         label="Title"
         value={titleBody}
         onChange={handleInputTitle}
-        required={titleError}
+        required
       />
 
       <TextField
@@ -146,7 +122,7 @@ export const NewMovie: React.FC<Props> = props => {
         label="Image URL"
         value={imgUrl}
         onChange={handleInputImgUrl}
-        required={titleError}
+        required
       />
 
       <TextField
@@ -154,7 +130,7 @@ export const NewMovie: React.FC<Props> = props => {
         label="Imdb URL"
         value={imdbUrl}
         onChange={handleInputImdbUrl}
-        required={titleError}
+        required
       />
 
       <TextField
@@ -162,7 +138,7 @@ export const NewMovie: React.FC<Props> = props => {
         label="Imdb ID"
         value={imdbId}
         onChange={handleInputImdbId}
-        required={titleError}
+        required
       />
 
       <div className="field is-grouped">
